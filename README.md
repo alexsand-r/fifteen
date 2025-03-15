@@ -4,7 +4,7 @@ This is an exciting logic game called "1-15," where the goal is to arrange all t
 
 The game is built with **React**, **Vite**, and **Tailwind CSS**.
 
-🔗 Live Demo: [Your GitHub Pages Link](https://yourusername.github.io/logical-game-1-15/)
+🔗 Live Demo: [Your GitHub Pages Link](https://alexsand-r.github.io/fifteen/)
 
 ## 🚀 Features
 
