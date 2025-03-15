@@ -26,6 +26,10 @@ The game is built with **React**, **Vite**, and **Tailwind CSS**.
  📫 Contact Me:
 1inboxna@gmail.com    
 
-![Game Preview](img/Screenshot_3.png)
+<p align="center">
+  <img src="img/image1.png" alt="Image 1" width="200" height="200">
+  <img src="img/image2.png" alt="Image 2" width="200" height="200">
+</p>
+
 
 
