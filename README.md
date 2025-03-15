@@ -1,4 +1,8 @@
 # 🧩 Logical Game 1-15
+<p align="center">
+  <img src="img/Screenshot_3.png" alt="Image 1" width="400" height="400">
+  <img src="img/Screenshot_1.png" alt="Image 2" width="400" height="400">
+</p>
 
 This is an exciting logic game called "1-15," where the goal is to arrange all the 15 tiles in the correct sequence. The tiles are moved by clicking on the tile with the number next to the empty space. The tile swaps places with the empty space, and the game continues until the tiles are arranged in ascending order from 1 to 15. The game starts a timer and a step counter with the first click. The game ends when the tiles are sorted in the correct order, and a popup will show the results.
 
@@ -26,10 +30,7 @@ The game is built with **React**, **Vite**, and **Tailwind CSS**.
  📫 Contact Me:
 1inboxna@gmail.com    
 
-<p align="center">
-  <img src="img/Screenshot_3.png" alt="Image 1" width="200" height="200">
-  <img src="img/Screenshot_1.png" alt="Image 2" width="200" height="200">
-</p>
+
 
 
 
