@@ -50,9 +50,11 @@ function App() {
   const [visiblePopup, setVisiblePopup] = useState(false); //попап с результатом
   const [isGameWon, setIsGameWon] = useState(false); // Состояние для отслеживания победы
 
-  //открываю попап с результатом
+  //открываю попап с результатом0 с задержкой 1000
   const openPopupResult = () => {
-    setVisiblePopup(true);
+    setTimeout(() => {
+      setVisiblePopup(true);
+    }, 1000);
   };
 
   //закрываю попап с результатом

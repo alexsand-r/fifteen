@@ -15,15 +15,17 @@ export const PopupResult = ({
   }, [resultArr]); // Этот useEffect будет срабатывать при изменении resultArr
 
   return (
-    <>
-      <section className="bg-[var(--color-custom-gray)] flex justify-center items-start fixed w-[100%] min-h-[100vh] top-0 left-0 overflow-auto z-10 text-black">
-        <div className="mx-auto px-[15px] md:h-auto">
-          <h1 className="text-2xl font-bold text-amber-300 mb-4 px-4 text-center mt-10">
-            Your Results
-          </h1>
-          <ul className="text-white text-lg flex flex-col gap-2 leading-none mb-10">
+    <section className="bg-[var(--color-custom-gray)] fixed w-[100%] min-h-screen top-0 left-0 z-10 text-black">
+      <h1 className="text-2xl font-bold text-amber-300 mb-3 md:mb-4 px-4 text-center mt-5 md:mt-10">
+        Your Results
+      </h1>
+      <div className="mx-auto px-[15px] md:h-auto mb-10">
+        <div className="max-h-[80vh] overflow-y-auto ">
+          {" "}
+          {/* Добавьте max-h и overflow-y-auto для прокрутки */}
+          <ul className="text-white text-lg flex flex-col items-center gap-2 leading-none mb-10">
             {resultArr.length === 0 ? (
-              <li>Нет результатов</li> // Отображаем сообщение, если массив пуст
+              <li>No results</li> // Отображаем сообщение, если массив пуст
             ) : (
               resultArr.map((el) => (
                 <li key={el.id} className="flex">
@@ -51,7 +53,7 @@ export const PopupResult = ({
             </button>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };

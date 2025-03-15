@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid"; // Используем uuid для уникальных ключей
 import Tile from "../tile/tile";
 
 function PlayingField({
