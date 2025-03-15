@@ -19,14 +19,9 @@ The game is built with **React**, **Vite**, and **Tailwind CSS**.
 - ![Vite](https://img.shields.io/badge/Vite-232F3E?style=for-the-badge&logo=vite&logoColor=FFD700) **Vite** – For fast development and bundling.  
 - ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-232F3E?style=for-the-badge&logo=tailwindcss&logoColor=38B2AC) **Tailwind CSS** – For styling the application and ensuring a responsive design.  
 
-## 📥 Installation
+ 
 
-To get started with this project locally, follow these steps:
 
-1. **Clone the Repository**  
-
-   ```bash
-   git clone (https://github.com/alexsand-r/fifteen)
 
  📫 Contact Me:
 1inboxna@gmail.com  
