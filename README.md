@@ -24,5 +24,5 @@ The game is built with **React**, **Vite**, and **Tailwind CSS**.
 
 
  📫 Contact Me:
-1inboxna@gmail.com  
+1inboxna@gmail.com    
 
