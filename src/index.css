@@ -2,12 +2,13 @@
 
 @theme {
   --breakpoint-375: 23.4375rem;
+--color-custom-gray: rgb(93, 91, 91);
 
 }
 
 :root {
     font-family: 'Roboto', sans-serif;
-  /* line-height: 1.5; */
+  /* line-height: 1.0; */
   font-weight: 400;
 
   color-scheme: light dark;

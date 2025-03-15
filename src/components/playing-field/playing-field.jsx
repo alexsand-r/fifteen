@@ -1,66 +1,36 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid"; // Используем uuid для уникальных ключей
 import Tile from "../tile/tile";
-
-// Функция перемешивания массива, гарантированно создающая решаемую головоломку
-const shuffleSolvableArray = (array) => {
-  let newArr = [...array];
-
-  // Делаем несколько случайных движений, чтобы сохранить решаемость
-  for (let i = 0; i < 1000; i++) {
-    const nullIndex = newArr.indexOf(null);
-    const possibleMoves = [];
-
-    // Вычисляем возможные ходы
-    if (nullIndex % 4 !== 0) possibleMoves.push(nullIndex - 1); // Влево
-    if (nullIndex % 4 !== 3) possibleMoves.push(nullIndex + 1); // Вправо
-    if (nullIndex >= 4) possibleMoves.push(nullIndex - 4); // Вверх
-    if (nullIndex < 12) possibleMoves.push(nullIndex + 4); // Вниз
-
-    // Выбираем случайный ход и двигаем пустую клетку
-    const moveIndex =
-      possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-    [newArr[nullIndex], newArr[moveIndex]] = [
-      newArr[moveIndex],
-      newArr[nullIndex],
-    ];
-  }
-
-  return newArr;
-};
-
-// Исходный массив плиток, включая пустую клетку (null)
-const initialTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
 
 function PlayingField({
   increaseStep,
-  isRunning,
   setIsRunning,
   addResultToResultArr,
   setId,
+  plates,
+  setPlates,
+  openPopupResult,
+  isGameWon,
+  setIsGameWon,
 }) {
-  const [plates, setPlates] = useState(initialTiles);
-  const [isGameWon, setIsGameWon] = useState(false); // Состояние для отслеживания победы
   //функция запускает таймер
   const startTimer = () => {
     setIsRunning(true); // Запускаем таймер
   };
-  //функция запускает таймер
+  //функция останавливает таймер
   const stopTimer = () => {
     setIsRunning(false); // Запускаем таймер
     setId((prevId) => prevId + 1); // Увеличиваем ID при остановке таймера
   };
+
+  // отслеживаю победу
   useEffect(() => {
     if (isGameWon) {
       stopTimer();
       addResultToResultArr();
+      openPopupResult();
     }
   }, [isGameWon]);
-
-  // При загрузке игры перемешиваем плитки
-  useEffect(() => {
-    const newPlates = shuffleSolvableArray(initialTiles);
-    setPlates(newPlates);
-  }, []);
 
   // Проверка на победу
   const checkWin = (tiles) => {
@@ -128,16 +98,16 @@ function PlayingField({
         {plates.map((el, index) =>
           el !== null ? (
             <Tile
-              key={index}
+              key={index} // Используем индекс для ключа плитки
               number={el}
               onClick={() => {
                 handleTileClick(index);
                 startTimer();
               }}
-              isGameWon={isGameWon} // Передаем состояние победы в Tile
+              isGameWon={isGameWon}
             />
           ) : (
-            <div key={index} className="bg-transparent"></div>
+            <div key={`empty-${index}`} className="bg-transparent"></div> // Используем индекс для пустой клетки
           )
         )}
       </div>

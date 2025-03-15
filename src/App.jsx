@@ -1,13 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PlayingField from "./components/playing-field/playing-field";
 
 import Step from "./components/step/step";
 import Timer from "./components/timer/timer";
+import { PopupResult } from "./components/popup-result/popup-result";
 
+// Исходный массив плиток, включая пустую клетку (null)
+const initialTiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
+// Функция перемешивания массива, гарантированно создающая решаемую головоломку
+const shuffleSolvableArray = (array) => {
+  let newArr = [...array];
+
+  // Делаем несколько случайных движений, чтобы сохранить решаемость
+  for (let i = 0; i < 1000; i++) {
+    const nullIndex = newArr.indexOf(null);
+    const possibleMoves = [];
+
+    // Вычисляем возможные ходы
+    if (nullIndex % 4 !== 0) possibleMoves.push(nullIndex - 1); // Влево
+    if (nullIndex % 4 !== 3) possibleMoves.push(nullIndex + 1); // Вправо
+    if (nullIndex >= 4) possibleMoves.push(nullIndex - 4); // Вверх
+    if (nullIndex < 12) possibleMoves.push(nullIndex + 4); // Вниз
+
+    // Выбираем случайный ход и двигаем пустую клетку
+    const moveIndex =
+      possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+    [newArr[nullIndex], newArr[moveIndex]] = [
+      newArr[moveIndex],
+      newArr[nullIndex],
+    ];
+  }
+
+  return newArr;
+};
+
+// массив для результатов игры
 const resultArr = [];
 console.log("массив результатов сначала-", resultArr);
 
 function App() {
+  const [plates, setPlates] = useState(initialTiles); //состояние для исходного массива
   const [countStep, setCountStep] = useState(0); // состояние для счетчика шагов
   const [ms, setMs] = useState(0); // миллисекунды
   const [sec, setSec] = useState(0); // состояние для сек
@@ -15,6 +47,32 @@ function App() {
   const [hour, setHour] = useState(0); //состояние часы
   const [id, setId] = useState(0); // состояние для ключа
   const [isRunning, setIsRunning] = useState(false); // Флаг для запуска таймера
+  const [visiblePopup, setVisiblePopup] = useState(false); //попап с результатом
+  const [isGameWon, setIsGameWon] = useState(false); // Состояние для отслеживания победы
+
+  //открываю попап с результатом
+  const openPopupResult = () => {
+    setVisiblePopup(true);
+  };
+
+  //закрываю попап с результатом
+  const closePopupResult = () => {
+    setVisiblePopup(false);
+  };
+
+  // Останавливаем прокручивание страницы при открытии попапа
+  useEffect(() => {
+    if (visiblePopup) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto"; // Восстанавливаем прокручивание, когда попап скрыт
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // В случае, если компонент будет удалён
+    };
+  }, [visiblePopup]);
+
   // объект таймера
   const [result, setResult] = useState({
     ms: 0,
@@ -25,8 +83,10 @@ function App() {
     id: 0,
   });
 
+  // При загрузке игры перемешиваем плитки
   useEffect(() => {
-    console.log("Timer start-", result);
+    const newPlates = shuffleSolvableArray(initialTiles);
+    setPlates(newPlates);
   }, []);
 
   // useEffect для запуска таймера
@@ -67,29 +127,32 @@ function App() {
     }
   }, [min]);
 
+  // функция которая перемешивает плитки при клике на кнопку
+  const shuffleTile = () => {
+    const newPlates = shuffleSolvableArray(initialTiles);
+    setPlates(newPlates);
+    setIsGameWon(false); // Сбрасываем флаг победы
+  };
+
   // функция счетчик
   const increaseStep = () => {
     setCountStep(countStep + 1);
     //console.log("step -", count);
   };
 
-  // получаю значения  финиша счетчика
-  useEffect(() => {
-    setResult({ ms, sec, min, hour, id, countStep });
-  }, [ms, sec, min, hour, id, countStep]);
+  const lastId = useRef(null);
 
   useEffect(() => {
-    console.log("Timer finish-", result);
-  }, [result]);
+    if (id !== 0 && lastId.current !== id) {
+      const newResult = { ms, sec, min, hour, id, countStep };
 
-  // Следит за изменением result и добавляет его в массив
-  useEffect(() => {
-    if (result.id !== 0) {
-      // Добавляем только когда id уже изменился
-      resultArr.push(result);
+      setResult(newResult); // Обновляем result
+      resultArr.push(newResult); // Добавляем в массив только уникальные id
+      lastId.current = id; // Запоминаем последний добавленный id
+
       console.log("Обновленный массив результатов:", resultArr);
     }
-  }, [result]); // Срабатывает при изменении result
+  }, [ms, sec, min, hour, id, countStep]); // Следим за изменениями
 
   const addResultToResultArr = () => {
     setResult((prevResult) => {
@@ -97,6 +160,31 @@ function App() {
       return newResult;
     });
   };
+
+  // сбрасываю таймер
+  const resetTimer = () => {
+    setMs(0);
+    setSec(0);
+    setMin(0);
+    setHour(0);
+
+    setResult((prevResult) => ({
+      ...prevResult,
+      ms: 0,
+      sec: 0,
+      min: 0,
+      hour: 0,
+      countStep: 0,
+    }));
+
+    setIsRunning(false); // Останавливаем таймер
+  };
+
+  // сбросить шаги
+  const resetStep = () => {
+    setCountStep(0);
+  };
+
   console.log("массив результатов после игры-", resultArr);
 
   return (
@@ -115,7 +203,21 @@ function App() {
         setIsRunning={setIsRunning}
         addResultToResultArr={addResultToResultArr}
         setId={setId}
+        plates={plates}
+        setPlates={setPlates}
+        openPopupResult={openPopupResult}
+        isGameWon={isGameWon}
+        setIsGameWon={setIsGameWon}
       />
+      {visiblePopup && (
+        <PopupResult
+          resultArr={resultArr}
+          shuffleTile={shuffleTile}
+          resetStep={resetStep}
+          resetTimer={resetTimer}
+          closePopupResult={closePopupResult}
+        />
+      )}
     </>
   );
 }
